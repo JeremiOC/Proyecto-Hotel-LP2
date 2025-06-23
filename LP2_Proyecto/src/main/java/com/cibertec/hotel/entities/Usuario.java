@@ -41,7 +41,7 @@ public class Usuario {
     private String nombreFoto;
 
 	@ManyToOne
-	@JoinColumn(name = "rol_id")
+	@JoinColumn(name = "idRol")
 	private Rol idRol;
 
 }
