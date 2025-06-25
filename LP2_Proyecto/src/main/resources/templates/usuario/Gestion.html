@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento de Usuarios - Horizon Luxe</title>
+	<link rel="stylesheet" th:href="@{/styles/usuario.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+			<div class="logo">
+			      <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+			 </div>
+            <h1>Mantenimiento de Usuarios</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${mensaje}" class="message success">
+                <p th:text="${mensaje}"></p>
+            </div>
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('registro')">Registrar Usuario</button>
+                <button class="tab" onclick="switchTab('buscar')">Buscar y Gestionar</button>
+            </div>
+
+            <!-- Registro de Usuario -->
+            <div id="registro" class="tab-content active">
+                <div class="form-section">
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">Datos del Usuario</h3>
+                    
+                    <form th:action="@{/usuarios/registrar}" method="post" enctype="multipart/form-data" th:object="${usuarioDTO}">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="username">Nombre de Usuario:</label>
+                                <input type="text" id="username" th:field="*{username}" required placeholder="Ingrese nombre de usuario">
+								<div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="correo">Correo Electrónico:</label>
+                                <input type="email" id="correo" th:field="*{correo}" required placeholder="usuario@ejemplo.com">
+								<div class="error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="clave">Contraseña:</label>
+                                <input type="password" id="clave" th:field="*{clave}" required placeholder="Ingrese una Contraseña">
+								<div class="error" th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="idRol">Rol del Usuario:</label>
+                                <select id="idRol" th:field="*{idRol}" required>
+                                    <option value="" disabled selected>-- Selecciona un rol --</option>
+                                    <option th:each="rol : ${listaRoles}" 
+                                            th:value="${rol.idRol}" 
+                                            th:text="${rol.nombre}">
+                                    </option>
+                                </select>
+								<div class="error" th:if="${#fields.hasErrors('idRol')}" th:errors="*{idRol}"></div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="imagen">Imagen de Perfil:</label>
+                                <div class="file-upload">
+                                    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                                    <label for="imagen" class="file-upload-label">
+                                        📷 Seleccionar imagen...
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                            <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Búsqueda y Gestión -->
+            <div id="buscar" class="tab-content">
+                <div class="search-section">
+                    <h3 style="margin-bottom: 15px; color: #031d40 ;">Buscar Usuario</h3>
+                    <div class="search-box">
+                        <div class="form-group search-input">
+                            <label for="busqueda">Buscar por nombre, correo o rol:</label>
+                            <input type="text" id="busqueda" placeholder="Ingrese término de búsqueda...">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="buscarUsuarios()">🔍 Buscar</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+					<table>
+					        <thead style="background: #031d40;">
+					            <tr>
+					                <th>Foto</th>
+					                <th>Usuario</th>
+					                <th>Correo</th>
+					                <th>Rol</th>
+					                <th>Acciones</th>
+					            </tr>
+					        </thead>
+					        <tbody id="tablaUsuarios">
+					            <tr th:each="usuario : ${usuarios}">
+					                <td>
+					                    <img th:src="${usuario.urlFoto}" alt="Foto de usuario" />
+					                </td>
+					                <td th:text="${usuario.username}">Nombre</td>
+					                <td th:text="${usuario.correo}">Correo</td>
+					                <td th:text="${usuario.idRol.nombre}">Rol</td>
+					                <td class="actions">
+					                    <a th:href="@{'/usuarios/editar/' + ${usuario.idUsuario}}">
+					                        <button>Editar</button>
+					                    </a>
+					                    <a th:href="@{'/usuarios/eliminar/' + ${usuario.idUsuario}}" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">
+					                        <button>Eliminar</button>
+					                    </a>
+					                </td>
+					            </tr>
+					        </tbody>
+					    </table>
+                </div>
+				
+            </div>
+			<div style="margin: 20px 0;">
+			    <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
+			        🔙 Volver al Menú Principal
+			    </a>
+			</div>
+        </div>
+		
+    </div>
+	
+</body>
+
+</html>
+<script th:src="@{/js/usuario.js}"></script>

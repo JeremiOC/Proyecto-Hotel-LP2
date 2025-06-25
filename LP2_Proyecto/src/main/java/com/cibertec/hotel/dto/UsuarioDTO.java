@@ -14,7 +14,7 @@ import lombok.Setter;
 	public class UsuarioDTO {
 
 	    @NotBlank(message = "Nombre De Usuario no puede estar vacio")
-	    @Size(min = 3, max = 70, message = "El Nombre de usuario debe de estar en el rango de 3 y 70 caracteres")
+	    @Size(min = 3, max = 70, message = "Username rango invalido de caracteres")
 	    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "El usuario solo puede contener letras, números, puntos, guiones y guiones bajos")
 	    private String username;
 

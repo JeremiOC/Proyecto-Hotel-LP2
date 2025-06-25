@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bienvenido</title>
+</head>
+<body>
+    <h1>¡Bienvenido a Horizon Luxe!</h1>
+    <p>Tu cuenta ha sido creada correctamente.</p>
+    <p><strong>Correo:</strong> <span th:text="${correo}"></span></p>
+    <p><strong>Contraseña:</strong> <span th:text="${clave}"></span></p>
+	<div style="margin: 20px 0;">
+				    <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
+				        Ir al Menú Principal
+				    </a>
+				</div>
+</body>
+</html>

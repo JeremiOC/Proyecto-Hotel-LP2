@@ -3,6 +3,7 @@ package com.cibertec.hotel.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -10,8 +11,10 @@ import com.cibertec.hotel.dto.UsuarioDTO;
 import com.cibertec.hotel.entities.Usuario;
 import com.cibertec.hotel.repositories.RolRepository;
 import com.cibertec.hotel.services.UsuarioService;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.Valid;
+
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,35 +29,45 @@ public class UsuarioController {
 	@Autowired
 	private RolRepository rolRepository;
 	
-	@GetMapping("/form")
+	@GetMapping("/mantenimiento")
 	public String mostrarFormulario(Model model) {
 		
 		 model.addAttribute("usuarioDTO", new UsuarioDTO());
 		 model.addAttribute("listaRoles", rolRepository.findAll());
-		return "usuario/usuarios/form";
+		 
+		 model.addAttribute("usuarios", usuarioService.listarUsuarios());
+
+		 return "usuario/Gestion";
 	}
 	
-	@GetMapping("/listaUsuarios")
-	public String listaUsuario(Model model) {
-	    model.addAttribute("usuarios", usuarioService.listarUsuarios());
-	    return "usuario/listar";  // <--- Aquí asegúrate de tener este HTML
+	@PostMapping("/registrar")
+	public String registrarUsuario(
+	        @Valid @ModelAttribute UsuarioDTO usuarioDTO,
+	        BindingResult result,
+	        Model model,
+	        RedirectAttributes redirectAttributes) {
+
+	    if (result.hasErrors()) {
+	        model.addAttribute("listaRoles", rolRepository.findAll());
+	        model.addAttribute("usuarios", usuarioService.listarUsuarios());
+	        return "usuario/Gestion";
+	    }
+
+	    try {
+	        String plantilla = "http://localhost:8080/plantilla/cuenta?correo=[correo]&clave=[clave]";
+	        Usuario nuevo = usuarioService.registrarUsuario(usuarioDTO, plantilla);
+
+	        redirectAttributes.addFlashAttribute("mensaje", "Usuario creado correctamente: " + nuevo.getUsername());
+	        return "redirect:/usuarios/mantenimiento";
+
+	    } catch (Exception e) {
+	        model.addAttribute("error", e.getMessage());
+	        model.addAttribute("usuarioDTO", usuarioDTO);
+	        model.addAttribute("listaRoles", rolRepository.findAll());
+	        model.addAttribute("usuarios", usuarioService.listarUsuarios());
+	        return "usuario/Gestion";
+	    }
 	}
 
-	@PostMapping("/registrar")
-	public String postMethodName(@ModelAttribute UsuarioDTO usuarioDTO,
-			@RequestParam("imagen")MultipartFile imagen,
-			RedirectAttributes redirectAttributes) {
-		try {
-			usuarioDTO.setImagen(imagen);
-			String plantilla  = "http://localhost:8080/plantilla/cuenta?correo=[correo]&clave=[clave]";
-			Usuario nuevo = usuarioService.registrarUsuario(usuarioDTO, plantilla);
-			redirectAttributes.addFlashAttribute("mensaje", "Usuario creado correctamente: " + nuevo.getUsername());
-		}catch (Exception e) {
-				redirectAttributes.addFlashAttribute("error", "Error: " + e.getMessage());
-		        redirectAttributes.addFlashAttribute("usuarioDTO", usuarioDTO);
-		}
-		return "redirect:/usuarios/form";
-	}
-	
 	
 }

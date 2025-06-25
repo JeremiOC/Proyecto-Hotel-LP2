@@ -2,6 +2,7 @@ package com.cibertec.hotel.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cibertec.hotel.config.PasswordEncoderConfig;
 import com.cibertec.hotel.dto.UsuarioDTO;
 import com.cibertec.hotel.entities.Rol;
 import com.cibertec.hotel.entities.Usuario;
@@ -84,10 +84,17 @@ public class UsuarioServiceImpl implements UsuarioService{
 		Usuario guardado = usuarioRepository.save(usuario);
 		
 		if(urlPlantillaCorreo != null && !urlPlantillaCorreo.isBlank()) {
-			urlPlantillaCorreo = urlPlantillaCorreo
-					.replace("[correo]", guardado.getCorreo())
-					.replace("[clave]", claveOriginal);
-			correoService.enviarCorreo(guardado.getCorreo(), "Bienvenido", "<b>Usuario creado correctamente</b><br>Correo: " + guardado.getCorreo() + "<br>Clave: " + claveOriginal);
+			
+			String correo = URLEncoder.encode(guardado.getCorreo(), "UTF-8");
+			String clave = URLEncoder.encode(claveOriginal, "UTF-8");
+
+			urlPlantillaCorreo = "http://localhost:8080/plantilla/cuenta?correo=" + correo + "&clave=" + clave;
+
+			String contenido = "<b>Usuario creado correctamente</b><br>" +
+	                   "Correo: " + guardado.getCorreo() + "<br>" +
+	                   "Clave: " + claveOriginal + "<br>" +
+	                   "<a href='" + urlPlantillaCorreo + "'>Accede a tu cuenta</a>";
+			correoService.enviarCorreo(guardado.getCorreo(), "Bienvenido", contenido);
 		}
 		
 		return guardado;
