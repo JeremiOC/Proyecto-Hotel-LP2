@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento de Habitaciones - Horizon Luxe</title>
+    <link rel="stylesheet" th:href="@{/styles/habitacion.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+            </div>
+            <h1>Mantenimiento de Habitaciones</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${mensaje}" class="message success">
+                <p th:text="${mensaje}"></p>
+            </div>
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('registro')">Registrar Habitación</button>
+                <button class="tab" onclick="switchTab('buscar')">Buscar y Gestionar</button>
+            </div>
+
+            <!-- Registro de Habitación -->
+            <div id="registro" class="tab-content active">
+                <div class="form-section">
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">Datos de la Habitación</h3>
+
+                    <form th:action="@{/habitaciones/registrar}" method="post" th:object="${habitacionDto}">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="numero">Número de Habitación:</label>
+                                <input type="text" id="numero" th:field="*{numero}" required placeholder="Ej. 101">
+                                <div class="error" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoId">Tipo de Habitación:</label>
+                                <select id="tipoId" th:field="*{tipoId}" required>
+                                    <option value="" disabled selected>-- Selecciona un tipo --</option>
+                                    <option th:each="tip : ${tiposHabitacion}" th:value="${tip.id}" th:text="${tip.descripcion}"></option>
+                                </select>
+                                <div class="error" th:if="${#fields.hasErrors('tipoId')}" th:errors="*{tipoId}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="disponible">¿Disponible?</label>
+                                <select id="disponible" th:field="*{disponible}">
+                                    <option value="true">Sí</option>
+                                    <option value="false">No</option>
+                                </select>
+                                <div class="error" th:if="${#fields.hasErrors('disponible')}" th:errors="*{disponible}"></div>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                            <button type="submit" class="btn btn-primary">Registrar Habitación</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Búsqueda y Gestión -->
+            <div id="buscar" class="tab-content">
+                <div class="search-section">
+                    <h3 style="margin-bottom: 15px; color: #031d40;">Buscar Habitación</h3>
+                    <div class="search-box">
+                        <div class="form-group search-input">
+                            <label for="busqueda">Buscar:</label>
+                            <input type="text" id="busqueda" placeholder="Número o tipo...">
+                        </div>
+                        <button type="button" class="btn btn-primary">🔍 Buscar</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <table>
+                        <thead style="background: #031d40; color: white;">
+                            <tr>
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Precio</th>
+                                <th>Disponible</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaHabitaciones">
+                            <tr th:each="hab : ${habitaciones}">
+                                <td th:text="${hab.numero}"></td>
+                                <td th:text="${hab.tipo.descripcion}"></td>
+                                <td th:text="${hab.tipo.precio}"></td>
+                                <td th:text="${hab.disponible ? 'Sí' : 'No'}"></td>
+                                <td>
+                                    <a th:href="@{/habitaciones/editar/{id}(id=${hab.id})}" class="btn btn-editar">✏️ Editar</a>
+                                    <button type="button"
+                                            class="btn btn-eliminar"
+                                            th:attr="data-id=${hab.id}, data-numero=${hab.numero}"
+                                            onclick="confirmarEliminacion(this)">🗑️ Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
+                    🔙 Volver al Menú Principal
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script th:src="@{/js/habitacion.js}"></script>
+</html>

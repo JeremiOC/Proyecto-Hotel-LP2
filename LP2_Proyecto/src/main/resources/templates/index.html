@@ -41,13 +41,24 @@
                         <span class="menu-arrow">▼</span>
                     </button>
                     <div class="submenu">
-                        <div class="submenu-item" onclick="loadContent('registrar-cliente')">Registrar Cliente</div>
-                        <div class="submenu-item" onclick="loadContent('buscar-cliente')">Buscar Cliente</div>
-                        <div class="submenu-item" onclick="loadContent('historial-cliente')">Historial de Cliente</div>
-                        <div class="submenu-item" onclick="loadContent('editar-cliente')">Editar Cliente</div>
-                        <div class="submenu-item" onclick="loadContent('clientes-vip')">Clientes VIP</div>
+						<div class="submenu-item">
+							<a th:href="@{/clientes/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Clientes</a>
+						</div>
                     </div>
                 </div>
+				<!-- Gestión de Habitaciones -->
+				                <div class="menu-item">
+				                    <button class="menu-toggle" onclick="toggleSubmenu(this)">
+				                        <span class="menu-icon">🏃</span>
+				                        <span class="menu-text">Gestión de Habitaciones</span>
+				                        <span class="menu-arrow">▼</span>
+				                    </button>
+				                    <div class="submenu">
+										<div class="submenu-item">
+											<a th:href="@{/habitaciones/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Habitaciones</a>
+										</div>
+				                    </div>
+				                </div>
             </nav>
         </aside>
 

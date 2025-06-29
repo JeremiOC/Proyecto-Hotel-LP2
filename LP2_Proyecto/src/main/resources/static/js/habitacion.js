@@ -14,33 +14,10 @@ function switchTab(tabName) {
     event.target.classList.add('active');
 }
 
-function buscarUsuarios() {
-    const termino = document.getElementById('busqueda').value;
-    console.log('Buscando usuarios con término:', termino);
-}
-
-document.getElementById('imagen').addEventListener('change', function(e) {
-    const label = document.querySelector('.file-upload-label');
-    if (e.target.files.length > 0) {
-        label.textContent = '📷 ' + e.target.files[0].name;
-    } else {
-        label.textContent = '📷 Seleccionar imagen...';
-    }
-});
-
-document.getElementById('correo').addEventListener('blur', function(e) {
-    const email = e.target.value;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email && !emailRegex.test(email)) {
-        e.target.style.borderColor = '#dc3545';
-    } else {
-        e.target.style.borderColor = '#e0e6ed';
-    }
-});
 
 document.getElementById('busqueda').addEventListener('input', function(e) {
     const termino = e.target.value.toLowerCase();
-    const filas = document.querySelectorAll('#tablaUsuarios tr');
+    const filas = document.querySelectorAll('#tablaHabitaciones tr');
     
     filas.forEach(fila => {
         const texto = fila.textContent.toLowerCase();
@@ -52,12 +29,10 @@ document.getElementById('busqueda').addEventListener('input', function(e) {
     });
 });
 function limpiarFormulario() {
-    document.getElementById('username').value = '';
-    document.getElementById('correo').value = '';
-    document.getElementById('clave').value = '';
-    document.getElementById('idRol').value = '';
-    document.getElementById('imagen').value = '';
-    document.querySelector('.file-upload-label').textContent = '📷 Seleccionar imagen...';
+    document.getElementById('numero').value = '';
+    document.getElementById('tipoId').value = '';
+    document.getElementById('disponible').value = '';
+
 }
 function confirmarEliminacion(boton) {
     const id = boton.getAttribute("data-id");
@@ -65,7 +40,7 @@ function confirmarEliminacion(boton) {
 
     Swal.fire({
         title: `¿Estás seguro?`,
-        text: `¿Deseas eliminar al usuario ${nombre}?`,
+        text: `¿Deseas eliminar la habitacion ${nombre}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -74,7 +49,7 @@ function confirmarEliminacion(boton) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/usuarios/eliminar/${id}`;
+            window.location.href = `/habitaciones/eliminar/${id}`;
         }
     });
 }

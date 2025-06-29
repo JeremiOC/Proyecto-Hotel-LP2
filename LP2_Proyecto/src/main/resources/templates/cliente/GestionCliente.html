@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento de Clientes - Horizon Luxe</title>
+	<link rel="stylesheet" th:href="@{/styles/cliente.css}">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+			<div class="logo">
+			      <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+			 </div>
+            <h1>Mantenimiento de Clientes</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${mensaje}" class="message success">
+                <p th:text="${mensaje}"></p>
+            </div>
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('registro')">Registrar Cliente</button>
+                <button class="tab" onclick="switchTab('buscar')">Buscar y Gestionar</button>
+            </div>
+
+            <!-- Registro de Cliente -->
+            <div id="registro" class="tab-content active">
+                <div class="form-section">
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">Datos del Cliente</h3>
+                    
+                    <form th:action="@{/clientes/registrar}" method="post" enctype="multipart/form-data" th:object="${clienteDto}">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="nombres">Nombres:</label>
+                                <input type="text" id="nombres" th:field="*{nombres}" required placeholder="Ingrese nombres">
+								<div class="error" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="apellidoPaterno">Apellido Paterno:</label>
+                                <input type="text" id="apellidoPaterno" th:field="*{apellidoPaterno}" required placeholder="Apellido paterno">
+								<div class="error" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="apellidoMaterno">Apellido Materno:</label>
+                                <input type="text" id="apellidoMaterno" th:field="*{apellidoMaterno}" required placeholder="Apellido materno">
+								<div class="error" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoDocumentoId">Tipo de Documento:</label>
+                                <select id="tipoDocumentoId" th:field="*{tipoDocumentoId}" required>
+                                    <option value="" disabled selected>-- Selecciona un tipo --</option>
+                                    <option th:each="tip : ${listaTipos}" th:value="${tip.idTipoDoc}" th:text="${tip.nombre}"></option>
+                                </select>
+								<div class="error" th:if="${#fields.hasErrors('tipoDocumentoId')}" th:errors="*{tipoDocumentoId}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nroDocumento">Nro Documento:</label>
+                                <input type="text" id="nroDocumento" th:field="*{nroDocumento}" required placeholder="Documento de identidad">
+								<div class="error" th:if="${#fields.hasErrors('nroDocumento')}" th:errors="*{nroDocumento}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="telefono">Teléfono:</label>
+                                <input type="text" id="telefono" th:field="*{telefono}" placeholder="Teléfono">
+								<div class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico:</label>
+                                <input type="email" id="correo" th:field="*{email}" placeholder="ejemplo@correo.com">
+								<div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                                <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" required>
+								<div class="error" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                            <button type="submit" class="btn btn-primary">Registrar Cliente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Búsqueda y Gestión -->
+            <div id="buscar" class="tab-content">
+                <div class="search-section">
+                    <h3 style="margin-bottom: 15px; color: #031d40 ;">Buscar Cliente</h3>
+                    <div class="search-box">
+                        <div class="form-group search-input">
+                            <label for="busqueda">Buscar:</label>
+                            <input type="text" id="busqueda" placeholder=".....">
+                        </div>
+                        <button type="button" class="btn btn-primary">🔍 Buscar</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+					<table>
+					        <thead style="background: #031d40; color: white;">
+					            <tr>
+					                <th>Nombre</th>
+					                <th>Apellido Paterno</th>
+					                <th>Apellido Materno</th>
+					                <th>Nro Documento</th>
+					                <th>Tipo Documento</th>
+					                <th>Teléfono</th>
+					                <th>Fecha Nacimiento</th>
+					                <th>Acciones</th>
+					            </tr>
+					        </thead>
+					        <tbody id="tablaUsuarios">
+								<tr th:each="cliente : ${clientes}">
+								    <td th:text="${cliente.nombres}"></td>
+								    <td th:text="${cliente.apellidoPaterno}"></td>
+								    <td th:text="${cliente.apellidoMaterno}"></td>
+								    <td th:text="${cliente.nroDocumento}"></td>
+								    <td th:text="${cliente.tipoDocumento.nombre}"></td>
+								    <td th:text="${cliente.telefono}"></td>
+								    <td th:text="${cliente.fechaNacimiento}"></td>
+								    <td>
+										<a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-editar">✏️ Editar</a>
+										<button type="button"
+										        class="btn btn-eliminar"
+										        th:attr="data-id=${cliente.id}, data-nombre=${cliente.nombres}"
+										        onclick="confirmarEliminacion(this)">🗑️ Eliminar</button>
+								    </td>
+								</tr>
+					        </tbody>
+					    </table>
+                </div>
+            </div>
+			<div style="margin: 20px 0;">
+							    <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
+							        🔙 Volver al Menú Principal
+							    </a>
+			</div>
+        </div>
+    </div>
+</body>
+
+<script th:src="@{/js/cliente.js}"></script>
+</html>

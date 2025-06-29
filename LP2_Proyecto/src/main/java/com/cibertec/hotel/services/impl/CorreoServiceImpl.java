@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.cibertec.hotel.entities.Configuracion;
@@ -45,32 +46,30 @@ public class CorreoServiceImpl implements CorreoService {
 
        return mailSender;
 	}
-
+	
+	@Async
 	@Override
-	public boolean enviarCorreo(String destino, String asunto, String mensajeHtml) throws UnsupportedEncodingException {
-		 try {
-           // Cargar configuración de la BD
-           List<Configuracion> lista = configuracionRepository.findByRecurso("Servicio_Correo");
-           Map<String, String> config = lista.stream()
-                   .collect(Collectors.toMap(Configuracion::getPropiedad, Configuracion::getValor));
+	public void enviarCorreo(String destino, String asunto, String mensajeHtml) throws UnsupportedEncodingException {
+	    try {
+	        List<Configuracion> lista = configuracionRepository.findByRecurso("Servicio_Correo");
+	        Map<String, String> config = lista.stream()
+	            .collect(Collectors.toMap(Configuracion::getPropiedad, Configuracion::getValor));
 
-           JavaMailSenderImpl mailSender = crearMailSender(config);
+	        JavaMailSenderImpl mailSender = crearMailSender(config);
 
-           MimeMessage mensaje = mailSender.createMimeMessage();
-           MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+	        MimeMessage mensaje = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
-           helper.setFrom(config.get("correo"), config.get("alias"));
-           helper.setTo(destino);
-           helper.setSubject(asunto);
-           helper.setText(mensajeHtml, true); // true = HTML
+	        helper.setFrom(config.get("correo"), config.get("alias"));
+	        helper.setTo(destino);
+	        helper.setSubject(asunto);
+	        helper.setText(mensajeHtml, true);
 
-           mailSender.send(mensaje);
-           return true;
+	        mailSender.send(mensaje);
 
-       } catch (MessagingException e) {
-           logger.error("Error al enviar al correo : ",e);
-           return false;
-       }
+	    } catch (MessagingException e) {
+	        logger.error("Error al enviar correo: ", e);
+	    }
 	}
 
 }

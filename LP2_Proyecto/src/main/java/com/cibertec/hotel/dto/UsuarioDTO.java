@@ -5,7 +5,6 @@
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import lombok.Setter;
 
 	    @NotBlank(message = "Nombre De Usuario no puede estar vacio")
 	    @Size(min = 3, max = 70, message = "Username rango invalido de caracteres")
-	    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "El usuario solo puede contener letras, números, puntos, guiones y guiones bajos")
 	    private String username;
 
 	    @NotBlank(message = "El correo no puede estar vacío")
@@ -23,9 +21,7 @@ import lombok.Setter;
 	    private String correo;
 
 	    @NotBlank(message = "La contraseña no puede estar vacía")
-	    @Size(min = 4, message = "Mínimo 4 caracteres")
-	    @Pattern( regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).*$",
-	              message = "Debe contener al menos una mayúscula, una minúscula y un número")
+	    @Size(min = 3, message = "Mínimo 3 caracteres")
 	    private String clave;
 
 	    @NotNull(message = "Debe seleccionar un rol")

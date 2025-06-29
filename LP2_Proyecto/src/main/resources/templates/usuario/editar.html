@@ -1,0 +1,76 @@
+<!-- templates/usuario/editar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Usuario - Horizon Luxe</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/styles/usuario.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+            </div>
+            <h1>Editar Usuario</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form class="form-section" th:action="@{/usuarios/editar}" th:object="${usuarioDTO}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${id}" />
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario:</label>
+                        <input type="text" id="username" th:field="*{username}" required placeholder="Ingrese nombre de usuario" />
+                        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico:</label>
+                        <input type="email" id="correo" th:field="*{correo}" required placeholder="usuario@ejemplo.com" />
+                        <div class="error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clave">Contraseña:</label>
+                        <input type="password" id="clave" th:field="*{clave}" required placeholder="Ingrese una Contraseña" />
+                        <div class="error" th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idRol">Rol del Usuario:</label>
+                        <select id="idRol" th:field="*{idRol}" required>
+                            <option value="" disabled>-- Selecciona un rol --</option>
+                            <option th:each="rol : ${listaRoles}"
+                                    th:value="${rol.idRol}"
+                                    th:text="${rol.nombre}">
+                            </option>
+                        </select>
+                        <div class="error" th:if="${#fields.hasErrors('idRol')}" th:errors="*{idRol}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagen">Imagen de Perfil:</label>
+                        <div class="file-upload">
+                            <input type="file" id="imagen" name="imagen" accept="image/*" />
+                            <label for="imagen" class="file-upload-label">
+                                📷 Seleccionar nueva imagen...
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a th:href="@{/usuarios/mantenimiento}" class="btn btn-secondary">🔙 Volver</a>
+                    <button type="submit" class="btn btn-primary">💾 Actualizar Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

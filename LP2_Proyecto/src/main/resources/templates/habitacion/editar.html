@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Habitación - Horizon Luxe</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/styles/habitacion.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+            </div>
+            <h1>Editar Habitación</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form class="form-section" th:action="@{/habitaciones/editar}" th:object="${habitacionDTO}" method="post">
+                <input type="hidden" name="id" th:value="${id}" />
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="numero">Número de Habitación:</label>
+                        <input type="text" id="numero" th:field="*{numero}" required placeholder="Ej: 101, 202B, etc." />
+                        <div class="error" th:if="${#fields.hasErrors('numero')}" th:errors="*{numero}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoId">Tipo de Habitación:</label>
+                        <select id="tipoId" th:field="*{tipoId}" required>
+                            <option value="" disabled>-- Seleccione --</option>
+                            <option th:each="tip : ${tiposHabitacion}" th:value="${tip.id}" th:text="${tip.descripcion}"></option>
+                        </select>
+                        <div class="error" th:if="${#fields.hasErrors('tipoId')}" th:errors="*{tipoId}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="disponible">¿Disponible?</label>
+                        <select id="disponible" th:field="*{disponible}" required>
+                            <option th:value="true">Sí</option>
+                            <option th:value="false">No</option>
+                        </select>
+                        <div class="error" th:if="${#fields.hasErrors('disponible')}" th:errors="*{disponible}"></div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a th:href="@{/habitaciones/mantenimiento}" class="btn btn-secondary">🔙 Volver</a>
+                    <button type="submit" class="btn btn-primary">💾 Actualizar Habitación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

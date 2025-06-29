@@ -6,6 +6,6 @@ import java.io.UnsupportedEncodingException;
 
 public interface CorreoService {
 	
-	 boolean enviarCorreo(String destino, String asunto, String mensajeHtml) throws UnsupportedEncodingException;
+	 void enviarCorreo(String destino, String asunto, String mensajeHtml) throws UnsupportedEncodingException;
 	
 }

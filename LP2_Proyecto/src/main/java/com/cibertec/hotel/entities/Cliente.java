@@ -2,17 +2,11 @@ package com.cibertec.hotel.entities;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "cliente")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,22 +15,33 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer idCliente;
+    private Integer id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombreCli;
+    @Column(nullable = false, length = 100)
+    private String nombres;
 
-    @Column(name = "apellidos", nullable = false)
-    private String apellidosCli;
+    @Column(name = "apell_pat", nullable = false, length = 100)
+    private String apellidoPaterno;
 
-    @Column(name = "telefono")
+    @Column(name = "apell_mat", nullable = false, length = 100)
+    private String apellidoMaterno;
+
+    @Column(length = 50)
     private String telefono;
 
-    @Column(name = "documento_identidad", unique = true, nullable = false)
-    private String docIdentidad;
+    @Column(length = 50)
+    private String email;
 
+    @Column(name = "nro_documento", nullable = false, unique = true, length = 20)
+    private String nroDocumento;
+
+    @ManyToOne
+    @JoinColumn(name = "tipo_doc")
+    private TipoDocumento tipoDocumento;
+
+    @Column(nullable = false)
+    private boolean activo = true;
+    
     @Column(name = "fecha_nac", nullable = false)
-    private LocalDate fechaNac;
-
+    private LocalDate fechaNacimiento;
 }

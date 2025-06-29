@@ -1,0 +1,82 @@
+<!-- templates/usuario/editar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar Cliente - Horizon Luxe</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/styles/cliente.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
+            </div>
+            <h1>Editar Cliente</h1>
+        </div>
+
+        <div class="main-content">
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form class="form-section" th:action="@{/clientes/editar}" th:object="${clienteDTO}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${id}" />
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="username">Nombres:</label>
+                        <input type="text" id="nombres" th:field="*{nombres}" required placeholder="Ingrese nombre de cliente" />
+                        <div class="error" th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}"></div>
+                    </div>
+					<div class="form-group">
+					      <label for="apellidoPaterno">Apellido Paterno:</label>
+					       <input type="text" id="nombres" th:field="*{apellidoPaterno}" required placeholder="Ingrese apellido apterno de cliente" />
+					     <div class="error" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+					 </div>
+					 <div class="form-group">
+					 	 <label for="apellidoMaterno">Apellido Paterno:</label>
+						  <input type="text" id="apellidoMaterno" th:field="*{apellidoMaterno}" required placeholder="Ingrese apellido materno de cliente" />
+					 	 <div class="error" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+					 </div>
+					 <div class="form-group">
+					 	<label for="apellidoMaterno">Telefono:</label>
+					 	 <input type="text" id="telefono" th:field="*{telefono}" required placeholder="Ingrese telefono de cliente" />
+					 	 <div class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+					 </div>
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico:</label>
+                        <input type="email" id="correo" th:field="*{email}" required placeholder="cliente@ejemplo.com" />
+                        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+					<div class="form-group">
+					    <label for="tipoDocumentoId">Tipo de Documento:</label>
+					    <select id="tipoDocumentoId" th:field="*{tipoDocumentoId}" required>
+					        <option value="" disabled>-- Seleccione --</option>
+					        <option th:each="tip : ${listaTipos}" th:value="${tip.idTipoDoc}" th:text="${tip.nombre}"></option>
+					    </select>
+					    <div class="error" th:if="${#fields.hasErrors('tipoDocumentoId')}" th:errors="*{tipoDocumentoId}"></div>
+					</div>
+
+					<div class="form-group">
+					    <label for="nroDocumento">Nro Documento:</label>
+					    <input type="text" id="nroDocumento" th:field="*{nroDocumento}" required placeholder="Ingrese documento" />
+					    <div class="error" th:if="${#fields.hasErrors('nroDocumento')}" th:errors="*{nroDocumento}"></div>
+					</div>
+					
+					<div class="form-group">
+					     <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+					      <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" required>
+						<div class="error" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></div>
+					</div>
+                </div>
+
+                <div class="buttons">
+                    <a th:href="@{/clientes/mantenimiento}" class="btn btn-secondary">🔙 Volver</a>
+                    <button type="submit" class="btn btn-primary">💾 Actualizar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

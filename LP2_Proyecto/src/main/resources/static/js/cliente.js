@@ -14,20 +14,6 @@ function switchTab(tabName) {
     event.target.classList.add('active');
 }
 
-function buscarUsuarios() {
-    const termino = document.getElementById('busqueda').value;
-    console.log('Buscando usuarios con término:', termino);
-}
-
-document.getElementById('imagen').addEventListener('change', function(e) {
-    const label = document.querySelector('.file-upload-label');
-    if (e.target.files.length > 0) {
-        label.textContent = '📷 ' + e.target.files[0].name;
-    } else {
-        label.textContent = '📷 Seleccionar imagen...';
-    }
-});
-
 document.getElementById('correo').addEventListener('blur', function(e) {
     const email = e.target.value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,12 +38,14 @@ document.getElementById('busqueda').addEventListener('input', function(e) {
     });
 });
 function limpiarFormulario() {
-    document.getElementById('username').value = '';
+    document.getElementById('nombres').value = '';
+    document.getElementById('apellidoPaterno').value = '';
+    document.getElementById('apellidoMaterno').value = '';
+    document.getElementById('nroDocumento').value = '';
+    document.getElementById('telefono').value = '';
     document.getElementById('correo').value = '';
-    document.getElementById('clave').value = '';
-    document.getElementById('idRol').value = '';
-    document.getElementById('imagen').value = '';
-    document.querySelector('.file-upload-label').textContent = '📷 Seleccionar imagen...';
+    document.getElementById('fechaNacimiento').value = '';
+    document.getElementById('tipoDocumentoId').value = '';
 }
 function confirmarEliminacion(boton) {
     const id = boton.getAttribute("data-id");
@@ -65,7 +53,7 @@ function confirmarEliminacion(boton) {
 
     Swal.fire({
         title: `¿Estás seguro?`,
-        text: `¿Deseas eliminar al usuario ${nombre}?`,
+        text: `¿Deseas eliminar al cliente ${nombre}?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
@@ -74,7 +62,7 @@ function confirmarEliminacion(boton) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/usuarios/eliminar/${id}`;
+            window.location.href = `/clientes/eliminar/${id}`;
         }
     });
 }

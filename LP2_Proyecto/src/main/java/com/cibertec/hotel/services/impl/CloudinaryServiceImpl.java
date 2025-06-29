@@ -41,18 +41,21 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 	}
 
 
-	@SuppressWarnings("rawtypes")
 	@Override
+	@SuppressWarnings("rawtypes")
 	public boolean eliminarArchivo(String carpeta, String nombreArchivo) {
-		try {
-            String publicId = carpeta + "/" + nombreArchivo.replaceAll("\\.[^.]+$", ""); // sin extensión
-            Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
-            return "ok".equals(result.get("result"));
-        } catch (Exception e) {
-            logger.error("Error al eliminar la imagen del storage: ",e);
-            e.printStackTrace();
-            return false;
-        }
+	    try {
+	        String publicId = carpeta + "/" + nombreArchivo; 
+
+	        Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+
+	        return "ok".equals(result.get("result"));
+	    } catch (Exception e) {
+	        logger.error("Error al eliminar la imagen del storage: ", e);
+	        return false;
+	    }
 	}
+
+
 
 }

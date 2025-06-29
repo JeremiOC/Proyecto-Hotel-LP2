@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,17 +26,16 @@ import com.cibertec.hotel.services.UsuarioService;
 public class UsuarioServiceImpl implements UsuarioService{
 
 	private final UsuarioRepository usuarioRepository;
-	private final UsuarioMapper usuarioMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final CloudinaryService cloudinaryService;
 	private final CorreoService correoService;
 	private final RolRepository rolRepository;
 	
+	
 	public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper,
 			CloudinaryService cloudinaryService, CorreoService correoService,RolRepository rolRepository,
 			BCryptPasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
-		this.usuarioMapper = usuarioMapper;
 		this.cloudinaryService = cloudinaryService;
 		this.correoService = correoService;
 		this.rolRepository = rolRepository;
@@ -59,8 +59,10 @@ public class UsuarioServiceImpl implements UsuarioService{
 		if(usuarioRepository.existsByCorreo(dto.getCorreo())) {
 			throw new IllegalArgumentException("El correo ya esta registrado");
 		}
-		Usuario usuario = usuarioMapper.toEntity(dto);
-		
+		Usuario usuario = new Usuario();
+		usuario.setUsername(dto.getUsername());
+	    usuario.setCorreo(dto.getCorreo());
+	    
 		String claveOriginal = dto.getClave();
 		String claveEncriptada = passwordEncoder.encode(claveOriginal);
 		
@@ -96,21 +98,67 @@ public class UsuarioServiceImpl implements UsuarioService{
 	                   "<a href='" + urlPlantillaCorreo + "'>Accede a tu cuenta</a>";
 			correoService.enviarCorreo(guardado.getCorreo(), "Bienvenido", contenido);
 		}
-		
+
 		return guardado;
 		
 	}
 
 	@Override
-	public Optional<Usuario> actualizarUsuario(int id, UsuarioDTO dto) throws IOException {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public Optional<Usuario> actualizarUsuario(int id, UsuarioDTO dto) throws IOException {		
+		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		if(usuarioOpt.isEmpty()) {
+			return Optional.empty();
+		}
+		Usuario usuario  = usuarioOpt.get();
+		
+		boolean correoExistente = usuarioRepository.existsByCorreo(dto.getCorreo())&&
+									!usuario.getCorreo().equals(dto.getCorreo());
+		if(correoExistente) {
+			throw new IllegalArgumentException("El correo ya esta registrado");
+		}
+		
+		usuario.setUsername(dto.getUsername());
+		usuario.setCorreo(dto.getCorreo());
+		
+		if(!dto.getClave().equals(usuario.getClave())) {
+			String claveEncrip = passwordEncoder.encode(dto.getClave());
+			usuario.setClave(claveEncrip);
+		}
+		
+		
+		MultipartFile imagen = dto.getImagen();
+		if(imagen != null && !imagen.isEmpty()) {
+			if(usuario.getNombreFoto() == null || usuario.getNombreFoto().isBlank()) {
+				String nombreFoto = UUID.randomUUID().toString()+"_"+imagen.getOriginalFilename();
+				usuario.setNombreFoto(nombreFoto);
+			}
+			String urlFoto = cloudinaryService.subirArchivo(imagen.getInputStream(), "usuarios", usuario.getNombreFoto());
+			usuario.setUrlFoto(urlFoto);
+		}
+		
+		Rol rol = rolRepository.findById(dto.getIdRol())
+					.orElseThrow(()-> new RuntimeException("ROL NO EXISTE"));
+		usuario.setIdRol(rol);
+		
+		usuarioRepository.save(usuario);
+		return Optional.of(usuario);
 	}
 
 	@Override
 	public Optional<Boolean> eliminarUsuario(int id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		Optional<Usuario> usuOpt = usuarioRepository.findById(id);
+		if(usuOpt.isEmpty()) {
+			throw new IllegalArgumentException("Usuario con id : "+id+" no encontrado");
+		}
+		Usuario usu = usuOpt.get();
+		String nombreFoto = usu.getNombreFoto();
+		
+		if (nombreFoto != null && !nombreFoto.isBlank()) {
+		    cloudinaryService.eliminarArchivo("usuarios", nombreFoto);
+		}
+		usuarioRepository.deleteById(id);
+		return Optional.of(true);
+		
 	}
 
 

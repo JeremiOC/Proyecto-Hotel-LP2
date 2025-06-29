@@ -2,27 +2,46 @@ package com.cibertec.hotel.dto;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ClienteDTO {
 
-	@NotBlank(message = "Nombre de cliente no puede estar vacio")
-	private String nombreCli;
+    @NotBlank(message = "Nombres no puede estar vacío")
+    @Size(min = 3, max = 50, message = "Numero de caracteres invalidos")
+    private String nombres;
 
-	@NotBlank(message = "Apellidos de cliente no puede estar vacio")
-	private String apellidosCli;
+    @NotBlank(message = "Apellido paterno no puede estar vacío")
+    @Size(min = 3, max = 50, message = "Numero de caracteres invalidos")
+    private String apellidoPaterno;
 
-	@Size(min = 9, max = 12, message =  "El NUMERO DE TELEFONO debe de tener entre 9 y 12 caracteres")
-	private String telefono;
+    @NotBlank(message = "Apellido materno no puede estar vacío")
+    @Size(min = 3, max = 50, message = "Numero de caracteres invalidos")
+    private String apellidoMaterno;
 
-	@Size(min = 8, max = 12, message =  "El doc de identidad debe de tener entre 8 y 12 caracteres")
-	@NotBlank(message = "Documento de identidad del cliente no puede estar vacio")
-	private String docIdentidad;
+    @Size(min = 9, max = 12, message = "El número de teléfono debe tener entre 9 y 12 caracteres")
+    private String telefono;
 
-	@NotNull(message = "Fecha de Nacimiento no puede estar vacia")
-	@Past(message = "La fecha de nacimiento debe ser una fecha distinta a la de hoy")
-	private LocalDate fechaNac;
+    @Email(message = "El email no es válido")
+    private String email;
+
+    @NotBlank(message = "Documento de identidad del cliente no puede estar vacío")
+    @Size(min = 8, max = 12, message = "El documento de identidad debe tener entre 8 y 12 caracteres")
+    private String nroDocumento;
+
+    @NotNull(message = "Debe seleccionar un tipo de documento")
+    private Integer tipoDocumentoId;
+
+    @NotNull(message = "Fecha de nacimiento no puede estar vacía")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Past(message = "La fecha de nacimiento debe ser una fecha pasada")
+    private LocalDate fechaNacimiento;
+
+    // Este campo es opcional, según el uso (listar/editar)
+    private Boolean activo;
 }
