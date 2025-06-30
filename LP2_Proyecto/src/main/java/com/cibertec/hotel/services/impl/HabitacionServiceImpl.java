@@ -77,4 +77,9 @@ public class HabitacionServiceImpl implements HabitacionService{
 		return tipoHabitacionRepository.findAll();
 	}
 
+	@Override
+	public List<Habitacion> listarHabitacionesActivas() {
+		return habitacionRepository.findByDisponibleTrue();
+	}
+
 }

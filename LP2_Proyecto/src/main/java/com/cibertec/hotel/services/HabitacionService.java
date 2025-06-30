@@ -9,6 +9,7 @@ import com.cibertec.hotel.entities.TipoHabitacion;
 
 public interface HabitacionService {
 	List<Habitacion>listarHabitaciones();
+	List<Habitacion>listarHabitacionesActivas();
 	Habitacion registrarHabitacion(HabitacionDTO dto);
 	Optional<Habitacion> editarHabitacion(int id , HabitacionDTO dto);
 	Optional<Habitacion> encontrarPorId(int id);

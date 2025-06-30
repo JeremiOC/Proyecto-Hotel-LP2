@@ -47,18 +47,30 @@
                     </div>
                 </div>
 				<!-- Gestión de Habitaciones -->
-				                <div class="menu-item">
-				                    <button class="menu-toggle" onclick="toggleSubmenu(this)">
-				                        <span class="menu-icon">🏃</span>
-				                        <span class="menu-text">Gestión de Habitaciones</span>
-				                        <span class="menu-arrow">▼</span>
-				                    </button>
-				                    <div class="submenu">
-										<div class="submenu-item">
+				<div class="menu-item">
+				   <button class="menu-toggle" onclick="toggleSubmenu(this)">
+				          <span class="menu-icon">🏃</span>
+				          <span class="menu-text">Gestión de Habitaciones</span>
+				          <span class="menu-arrow">▼</span>
+				    </button>
+				           <div class="submenu">
+									<div class="submenu-item">
 											<a th:href="@{/habitaciones/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Habitaciones</a>
-										</div>
-				                    </div>
-				                </div>
+									</div>
+				           </div>
+				 </div>
+				 <div class="menu-item">
+				 		<button class="menu-toggle" onclick="toggleSubmenu(this)">
+				 				<span class="menu-icon">🏃</span>
+				 				 <span class="menu-text">Gestión de Reservas</span>
+				 				 <span class="menu-arrow">▼</span>
+				 		 </button>
+				 			<div class="submenu">
+				 					<div class="submenu-item">
+				 							<a th:href="@{/reservas/registrar}" style="text-decoration: none; color: inherit;">Registrar Reserva</a>
+				 					</div>
+				 			 </div>
+				  </div>
             </nav>
         </aside>
 

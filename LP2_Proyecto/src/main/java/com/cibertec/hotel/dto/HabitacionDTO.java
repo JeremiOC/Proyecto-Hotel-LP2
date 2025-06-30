@@ -1,5 +1,7 @@
 package com.cibertec.hotel.dto;
 
+import com.cibertec.hotel.validations.NumeroUnico;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +19,7 @@ public class HabitacionDTO {
 
     @NotBlank(message = "El número de habitación es obligatorio")
     @Size(min = 3, max = 50, message = "Ingrese 4 valores como minimo")
+    @NumeroUnico
     private String numero;
 
     @NotNull(message = "Debe seleccionar un tipo de habitación")

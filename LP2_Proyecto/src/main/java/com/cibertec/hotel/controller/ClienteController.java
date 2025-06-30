@@ -31,7 +31,7 @@ public class ClienteController {
 	@GetMapping("/mantenimiento")
 	public String mantenimiento(Model model) {
 	    if (!model.containsAttribute("clienteDto")) {
-	        model.addAttribute("clienteDto", new ClienteDTO()); // Necesario para el form
+	        model.addAttribute("clienteDto", new ClienteDTO()); 
 	    }
 	    model.addAttribute("clientes", clienteService.listarClientes());
 	    model.addAttribute("listaTipos", clienteService.listarTiposDoc());
