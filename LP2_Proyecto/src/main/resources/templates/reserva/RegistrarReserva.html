@@ -5,66 +5,70 @@
     <title>Registrar Reserva - Horizon Luxe</title>
     <link rel="stylesheet" th:href="@{/styles/reserva.css}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        script[type="application/json"] {
-            display: none !important;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <div class="logo">
-            <img src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Paris" th:src="@{/imgs/horizon_luxe_logo.jpeg}">
-        </div>
         <h1>Registrar Nueva Reserva</h1>
     </div>
+	<div th:if="${mensaje}" class="message success">
+	                <p th:text="${mensaje}"></p>
+	            </div>
+	            <div th:if="${error}" class="message error">
+	                <p th:text="${error}"></p>
+	            </div>
 
     <div class="main-content">
-
-        <div th:if="${mensaje}" class="message success">
-            <p th:text="${mensaje}"></p>
-        </div>
-        <div th:if="${error}" class="message error">
-            <p th:text="${error}"></p>
-        </div>
-
         <form th:action="@{/reservas/registrar}" method="post" th:object="${reservaDto}" class="form-section">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="nroReserva">Número de Reserva:</label>
-                    <input type="text" id="nroReserva" th:field="*{nroReserva}" readonly />
-                </div>
 
-                <div class="form-group">
-                    <label for="buscadorCliente">Cliente:</label>
-                    <input type="text" id="buscadorCliente" placeholder="Ingrese nombre, apellido o DNI" class="form-control" autocomplete="off">
-                    <input type="hidden" th:field="*{clienteId}" id="clienteId">
-                    <div id="resultadoClientes" class="autocomplete-list"></div>
-                    <div class="error" th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}"></div>
-                </div>
+            <fieldset class="bloque">
+                <legend>🧍 Cliente</legend>
+				<div class="form-group autocomplete-container">
+				    <label for="buscadorCliente">Buscar:</label>
+				    <input type="text" id="buscadorCliente" placeholder="Nombre, apellido o DNI" autocomplete="off">
+				    <div id="resultadoClientes" class="autocomplete-list"></div>
+				</div>
 
+                <input type="hidden" th:field="*{clienteId}" id="clienteId">
                 <div class="form-group">
-                    <label for="habitacionId">Habitación Seleccionada:</label>
-                    <input type="text" id="habitacionInput" placeholder="Seleccione una habitación" readonly class="form-control">
-                    <input type="hidden" th:field="*{habitacionId}" id="habitacionId">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="clienteNombre" readonly>
+                </div>
+                <div class="form-group">
+                    <label>DNI:</label>
+                    <input type="text" id="clienteDni" readonly>
+                </div>
+            </fieldset>
+
+            <fieldset class="bloque">
+                <legend>🛏 Habitación</legend>
+                <div class="form-group">
                     <button type="button" class="btn btn-primary" onclick="abrirModalHabitaciones()">Seleccionar Habitación</button>
+                    <input type="hidden" th:field="*{habitacionId}" id="habitacionId">
                 </div>
-
                 <div class="form-group">
-                    <label for="fechaInicio">Fecha Inicio:</label>
+                    <label>Descripción:</label>
+                    <input type="text" id="habitacionInput" readonly>
+                </div>
+            </fieldset>
+
+            <fieldset class="bloque">
+                <legend>📅 Datos de la Reserva</legend>
+                <div class="form-group">
+                    <label>Número de Reserva:</label>
+                    <input type="text" th:field="*{nroReserva}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Fecha Inicio:</label>
                     <input type="date" th:field="*{fechaInicio}" required>
-                    <div class="error" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+					<div class="error" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
                 </div>
-
                 <div class="form-group">
-                    <label for="fechaFin">Fecha Fin:</label>
+                    <label>Fecha Fin:</label>
                     <input type="date" th:field="*{fechaFin}" required>
-                    <div class="error" th:if="${#fields.hasErrors('fechaFin')}" th:errors="*{fechaFin}"></div>
-                    <div class="error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+					<div class="error" th:if="${#fields.hasErrors('fechaFin')}" th:errors="*{fechaFin}"></div>
                 </div>
-            </div>
+            </fieldset>
 
             <div class="buttons">
                 <a th:href="@{/}" class="btn btn-secondary">🔙 Volver</a>
@@ -80,8 +84,8 @@
         <span class="close" onclick="cerrarModalHabitaciones()">&times;</span>
         <h3>Seleccione una habitación</h3>
         <div class="habitaciones-container">
-            <div class="habitacion-card" 
-                 th:each="hab : ${habitacionesDisponibles}" 
+            <div class="habitacion-card"
+                 th:each="hab : ${habitacionesDisponibles}"
                  th:data-id="${hab.id}"
                  th:data-numero="${hab.numero}"
                  th:data-descripcion="${hab.tipo.descripcion}"
@@ -93,12 +97,55 @@
     </div>
 </div>
 
-<!-- Cliente JSON en formato oculto -->
 <script id="clientesData" type="application/json" th:inline="javascript">
     [[${clientes}]]
 </script>
-
-<!-- JS funcionalidad -->
-<script th:src="@{/js/reserva.js}"></script>
+<script>
+	function abrirModalHabitaciones() {
+	    document.getElementById('modalHabitaciones').style.display = 'block';
+	}
+	function cerrarModalHabitaciones() {
+	    document.getElementById('modalHabitaciones').style.display = 'none';
+	}
+	function seleccionarHabitacionModal(card) {
+	    const id = card.getAttribute('data-id');
+	    const numero = card.getAttribute('data-numero');
+	    const descripcion = card.getAttribute('data-descripcion');
+	    document.getElementById('habitacionId').value = id;
+	    document.getElementById('habitacionInput').value = `N° ${numero} - ${descripcion}`;
+	    cerrarModalHabitaciones();
+	}
+	document.addEventListener('DOMContentLoaded', () => {
+	    const input = document.getElementById('buscadorCliente');
+	    const resultado = document.getElementById('resultadoClientes');
+	    const hiddenInput = document.getElementById('clienteId');
+	    const clientes = JSON.parse(document.getElementById('clientesData').textContent);
+	    input.addEventListener('input', () => {
+	        const texto = input.value.toLowerCase();
+	        resultado.innerHTML = '';
+	        if (texto.length < 2) return;
+	        const filtrados = clientes.filter(cli =>
+	            (cli.nombres + ' ' + cli.apellidoPaterno + ' ' + cli.apellidoMaterno + ' ' + cli.nroDocumento).toLowerCase().includes(texto)
+	        );
+	        filtrados.forEach(cli => {
+	            const div = document.createElement('div');
+	            div.textContent = `${cli.nombres} ${cli.apellidoPaterno} ${cli.apellidoMaterno} (${cli.nroDocumento})`;
+	            div.onclick = () => {
+	                input.value = `${cli.nombres} ${cli.apellidoPaterno} ${cli.apellidoMaterno}`;
+	                hiddenInput.value = cli.id;
+	                document.getElementById('clienteNombre').value = input.value;
+	                document.getElementById('clienteDni').value = cli.nroDocumento;
+	                resultado.innerHTML = '';
+	            };
+	            resultado.appendChild(div);
+	        });
+	    });
+	    document.addEventListener('click', function (e) {
+	        if (!resultado.contains(e.target) && e.target !== input) {
+	            resultado.innerHTML = '';
+	        }
+	    });
+	});
+</script>
 </body>
 </html>

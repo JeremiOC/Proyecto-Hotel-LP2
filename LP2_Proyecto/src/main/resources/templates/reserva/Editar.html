@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Reserva - Horizon Luxe</title>
+    <link rel="stylesheet" th:href="@{/styles/reserva.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Editar Reserva</h1>
+    </div>
+	<div th:if="${mensaje}" class="message success">
+	                <p th:text="${mensaje}"></p>
+	            </div>
+	            <div th:if="${error}" class="message error">
+	                <p th:text="${error}"></p>
+	            </div>
+
+    <div class="main-content">
+		<form th:action="@{'/reservas/editar/' + ${id}}" method="post" th:object="${reservaDto}">
+
+            <fieldset class="bloque">
+                <legend>🧍 Cliente</legend>
+
+				<input type="hidden" id="clienteId" name="clienteId" th:value="${reservaDto.clienteId}">
+				<div class="form-group">
+				    <label>Nombre Completo:</label>
+				    <input type="text" id="clienteNombre" th:value="${clienteNombre}" readonly>
+				</div>
+				<div class="form-group">
+				    <label>DNI:</label>
+				    <input type="text" id="clienteDni" th:value="${clienteDni}" readonly>
+				</div>
+				<div class="error" th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}"></div>
+
+            </fieldset>
+
+            <fieldset class="bloque">
+                <legend>🛏 Habitación</legend>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="abrirModalHabitaciones()">Seleccionar Habitación</button>
+					
+                </div>
+                <div class="form-group">
+					<input type="hidden" id="habitacionId" name="habitacionId" th:value="${reservaDto.habitacionId}">
+                    <label>Descripción:</label>
+					<input type="text"
+							id="habitacionInput"
+							th:value="'N° ' + ${habitacion.numero} + ' - ' + ${habitacion.tipo.descripcion}"
+							readonly>
+                </div>
+				<div class="error" th:if="${#fields.hasErrors('habitacionId')}" th:errors="*{habitacionId}"></div>
+
+            </fieldset>
+
+            <fieldset class="bloque">
+                <legend>📅 Datos de la Reserva</legend>
+                <div class="form-group">
+                    <label>Número de Reserva:</label>
+                    <input type="text" th:field="*{nroReserva}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Fecha Inicio:</label>
+					<input type="date"
+					       name="fechaInicio"
+					       th:value="${#temporals.format(reservaDto.fechaInicio, 'yyyy-MM-dd')}"
+					       required>
+					<div class="error" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+
+                </div>
+                <div class="form-group">
+                    <label>Fecha Fin:</label>
+					<input type="date"
+					       name="fechaFin"
+					       th:value="${#temporals.format(reservaDto.fechaFin, 'yyyy-MM-dd')}"
+					       required>
+					<div class="error" th:if="${#fields.hasErrors('fechaFin')}" th:errors="*{fechaFin}"></div>
+
+				<div class="form-group">
+				    <label>Estado de la Reserva:</label>
+				    <select th:field="*{estadoId}" required>
+				        <option value="" disabled>Seleccione un estado</option>
+				        <option th:each="estado : ${estados}"
+				                th:value="${estado.idEstado}"
+				                th:text="${estado.nombre}"
+				                th:selected="${estado.idEstado} == *{estadoId}">
+				        </option>
+				    </select>
+				</div>
+            </fieldset>
+
+            <div class="buttons">
+                <a th:href="@{/reservas/listado}" class="btn btn-secondary">🔙 Volver</a>
+                <button type="submit" class="btn btn-primary">💾 Editar Reserva</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal habitaciones -->
+<div id="modalHabitaciones" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModalHabitaciones()">&times;</span>
+        <h3>Seleccione una habitación</h3>
+        <div class="habitaciones-container">
+            <div class="habitacion-card"
+                 th:each="hab : ${habitacionesDisponibles}"
+                 th:data-id="${hab.id}"
+                 th:data-numero="${hab.numero}"
+                 th:data-descripcion="${hab.tipo.descripcion}"
+                 onclick="seleccionarHabitacionModal(this)">
+                <h4 th:text="'N° ' + ${hab.numero}"></h4>
+                <p th:text="${hab.tipo.descripcion}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="clientesData" type="application/json" th:inline="javascript">
+    [[${clientes}]]
+</script>
+<script>
+	function abrirModalHabitaciones() {
+	    document.getElementById('modalHabitaciones').style.display = 'block';
+	}
+	function cerrarModalHabitaciones() {
+	    document.getElementById('modalHabitaciones').style.display = 'none';
+	}
+	function seleccionarHabitacionModal(card) {
+	    const id = card.getAttribute('data-id');
+	    const numero = card.getAttribute('data-numero');
+	    const descripcion = card.getAttribute('data-descripcion');
+	    document.getElementById('habitacionId').value = id;
+	    document.getElementById('habitacionInput').value = `N° ${numero} - ${descripcion}`;
+	    cerrarModalHabitaciones();
+	}
+</script>
+</body>
+</html>

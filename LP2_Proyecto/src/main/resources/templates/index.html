@@ -1,111 +1,90 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión Hotelera</title>
-	<link rel="stylesheet" th:href="@{/styles/index.css}">
+    <title>Horizon Luxe - Sistema Hotelero</title>
+    <link rel="stylesheet" th:href="@{/styles/index.css}">
 </head>
 <body>
     <div class="container">
-        <!-- Barra lateral -->
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <div class="logo-icon">🏨</div>
-                    <span class="logo-text">HotelSys</span>
+                    <img th:src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Logo" style="width: 40px; height: 40px; border-radius: 10px;">
+                    <span class="logo-text">Horizon Luxe</span>
                 </div>
                 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
             </div>
 
             <nav class="nav-menu">
-                <!-- Gestión de Usuarios -->
                 <div class="menu-item">
                     <button class="menu-toggle" onclick="toggleSubmenu(this)">
                         <span class="menu-icon">👥</span>
-                        <span class="menu-text">Gestion Usuarios</span>
+                        <span class="menu-text">Gestión Usuarios</span>
                         <span class="menu-arrow">▼</span>
                     </button>
                     <div class="submenu">
-						<div class="submenu-item">
-							<a th:href="@{/usuarios/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Usuarios</a>
-						</div>
+                        <div class="submenu-item">
+                            <a th:href="@{/usuarios/mantenimiento}">Mantenimiento Usuarios</a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Gestión de Clientes -->
                 <div class="menu-item">
                     <button class="menu-toggle" onclick="toggleSubmenu(this)">
-                        <span class="menu-icon">🏃</span>
-                        <span class="menu-text">Gestión de Clientes</span>
+                        <span class="menu-icon">🧍</span>
+                        <span class="menu-text">Gestión Clientes</span>
                         <span class="menu-arrow">▼</span>
                     </button>
                     <div class="submenu">
-						<div class="submenu-item">
-							<a th:href="@{/clientes/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Clientes</a>
-						</div>
+                        <div class="submenu-item">
+                            <a th:href="@{/clientes/mantenimiento}">Mantenimiento Clientes</a>
+                        </div>
                     </div>
                 </div>
-				<!-- Gestión de Habitaciones -->
-				<div class="menu-item">
-				   <button class="menu-toggle" onclick="toggleSubmenu(this)">
-				          <span class="menu-icon">🏃</span>
-				          <span class="menu-text">Gestión de Habitaciones</span>
-				          <span class="menu-arrow">▼</span>
-				    </button>
-				           <div class="submenu">
-									<div class="submenu-item">
-											<a th:href="@{/habitaciones/mantenimiento}" style="text-decoration: none; color: inherit;">Mantenimiento Habitaciones</a>
-									</div>
-				           </div>
-				 </div>
-				 <div class="menu-item">
-				 		<button class="menu-toggle" onclick="toggleSubmenu(this)">
-				 				<span class="menu-icon">🏃</span>
-				 				 <span class="menu-text">Gestión de Reservas</span>
-				 				 <span class="menu-arrow">▼</span>
-				 		 </button>
-				 			<div class="submenu">
-				 					<div class="submenu-item">
-				 							<a th:href="@{/reservas/registrar}" style="text-decoration: none; color: inherit;">Registrar Reserva</a>
-				 					</div>
-				 			 </div>
-				  </div>
+
+                <div class="menu-item">
+                    <button class="menu-toggle" onclick="toggleSubmenu(this)">
+                        <span class="menu-icon">🛏️</span>
+                        <span class="menu-text">Gestión Habitaciones</span>
+                        <span class="menu-arrow">▼</span>
+                    </button>
+                    <div class="submenu">
+                        <div class="submenu-item">
+                            <a th:href="@{/habitaciones/mantenimiento}">Mantenimiento Habitaciones</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item">
+                    <button class="menu-toggle" onclick="toggleSubmenu(this)">
+                        <span class="menu-icon">📅</span>
+                        <span class="menu-text">Gestión Reservas</span>
+                        <span class="menu-arrow">▼</span>
+                    </button>
+                    <div class="submenu">
+                        <div class="submenu-item">
+                            <a th:href="@{/reservas/registrar}">Registrar Reserva</a>
+                        </div>
+                        <div class="submenu-item">
+                            <a th:href="@{/reservas/listado}">Listar Reservas</a>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </aside>
 
-        <!-- Contenido principal -->
+        <!-- Main content -->
         <main class="main-content">
             <div class="welcome-card">
                 <h1 class="welcome-title">Bienvenido al Sistema de Gestión Hotelera</h1>
-                <p class="welcome-subtitle">Administra reservaciones, usuarios y clientes de manera eficiente</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-number">248</div>
-                    <div class="stat-label">Reservaciones Activas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number">1,847</div>
-                    <div class="stat-label">Clientes Registrados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🏨</div>
-                    <div class="stat-number">156</div>
-                    <div class="stat-label">Habitaciones Disponibles</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-number">$45,280</div>
-                    <div class="stat-label">Ingresos del Mes</div>
-                </div>
+                <p class="welcome-subtitle">Administra reservaciones, usuarios y clientes de manera eficiente.</p>
             </div>
         </main>
     </div>
 
+    <script th:src="@{/js/index.js}"></script>
 </body>
 </html>
-<script th:src="@{/js/index.js}"></script>

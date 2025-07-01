@@ -1,17 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bienvenido</title>
+    <meta charset="UTF-8">
+    <title>Bienvenido - Horizon Luxe</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f0f0, #dbe9f4);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .dato {
+            font-weight: bold;
+            color: #1d3557;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-    <h1>¡Bienvenido a Horizon Luxe!</h1>
-    <p>Tu cuenta ha sido creada correctamente.</p>
-    <p><strong>Correo:</strong> <span th:text="${correo}"></span></p>
-    <p><strong>Contraseña:</strong> <span th:text="${clave}"></span></p>
-	<div style="margin: 20px 0;">
-				    <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
-				        Ir al Menú Principal
-				    </a>
-				</div>
+    <div class="container">
+        <h1>🎉 ¡Bienvenido a Horizon Luxe!</h1>
+        <p>Tu cuenta ha sido creada con éxito.</p>
+
+        <p><span class="dato">📧 Correo:</span> <span th:text="${correo}"></span></p>
+        <p><span class="dato">🔑 Contraseña:</span> <span th:text="${clave}"></span></p>
+
+        <a th:href="@{/}" class="btn">🏠 Ir al Menú Principal</a>
+    </div>
 </body>
 </html>

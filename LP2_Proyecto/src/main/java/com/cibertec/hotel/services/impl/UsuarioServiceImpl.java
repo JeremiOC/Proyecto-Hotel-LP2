@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import com.cibertec.hotel.dto.UsuarioDTO;
 import com.cibertec.hotel.entities.Rol;
@@ -30,7 +32,8 @@ public class UsuarioServiceImpl implements UsuarioService{
 	private final CloudinaryService cloudinaryService;
 	private final CorreoService correoService;
 	private final RolRepository rolRepository;
-	
+	@Autowired
+	private SpringTemplateEngine templateEngine;
 	
 	public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper,
 			CloudinaryService cloudinaryService, CorreoService correoService,RolRepository rolRepository,
@@ -44,13 +47,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	@Override
 	public List<Usuario> listarUsuarios() {
-		// TODO Auto-generated method stub
 		return usuarioRepository.findAll();
 	}
 
 	@Override
 	public Optional<Usuario> encontrarPorId(int id) {
-		// TODO Auto-generated method stub
 		return usuarioRepository.findById(id);
 	}
 
@@ -92,10 +93,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 			urlPlantillaCorreo = "http://localhost:8080/plantilla/cuenta?correo=" + correo + "&clave=" + clave;
 
-			String contenido = "<b>Usuario creado correctamente</b><br>" +
-	                   "Correo: " + guardado.getCorreo() + "<br>" +
-	                   "Clave: " + claveOriginal + "<br>" +
-	                   "<a href='" + urlPlantillaCorreo + "'>Accede a tu cuenta</a>";
+			Context context = new Context();
+			context.setVariable("correo", guardado.getCorreo());
+			context.setVariable("clave", claveOriginal);
+			context.setVariable("url", urlPlantillaCorreo);
+
+			String contenido = templateEngine.process("correo/registro", context);
 			correoService.enviarCorreo(guardado.getCorreo(), "Bienvenido", contenido);
 		}
 

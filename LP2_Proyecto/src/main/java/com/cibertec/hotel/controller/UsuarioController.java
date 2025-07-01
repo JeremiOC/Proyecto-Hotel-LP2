@@ -84,7 +84,7 @@ public class UsuarioController {
 	    UsuarioDTO dto = new UsuarioDTO();
 	    dto.setUsername(usuario.getUsername());
 	    dto.setCorreo(usuario.getCorreo());
-	    dto.setClave(usuario.getClave()); // solo si quieres que vea la clave
+	    dto.setClave(usuario.getClave()); 
 	    dto.setIdRol(usuario.getIdRol().getIdRol());
 
 	    model.addAttribute("usuarioDTO", dto);

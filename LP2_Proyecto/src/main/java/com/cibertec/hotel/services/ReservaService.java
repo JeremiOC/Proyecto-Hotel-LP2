@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cibertec.hotel.dto.ReservaDTO;
+import com.cibertec.hotel.entities.EstadoReserva;
 import com.cibertec.hotel.entities.Reserva;
 
 public interface ReservaService {
@@ -13,5 +14,6 @@ public interface ReservaService {
 	Optional<Reserva> editarReserva(int id, ReservaDTO dto);
 	Optional<Reserva> buscarReservaPorId(int id);
 	List<Reserva> consultarReservaPorEstado(String nombre);
+	List<EstadoReserva> listarEstados();
 	String generarNroReserva();
 }

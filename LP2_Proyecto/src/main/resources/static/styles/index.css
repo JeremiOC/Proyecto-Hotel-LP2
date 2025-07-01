@@ -1,3 +1,14 @@
+:root {
+    --color-principal: #031d40;
+    --color-secundario: #ffffff;
+    --color-acento: #4c6ef5;
+    --color-fondo: #f4f6fa;
+    --color-hover: #e9efff;
+    --color-texto: #2d3748;
+    --color-subtexto: #666;
+    --color-borde: #dcdcdc;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +17,8 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--color-fondo);
+    color: var(--color-texto);
     height: 100vh;
     overflow: hidden;
 }
@@ -19,11 +31,12 @@ body {
 /* Sidebar */
 .sidebar {
     width: 280px;
-    background: #ffffff;
+    background: var(--color-principal);
     border-radius: 0 20px 20px 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: width 0.3s ease;
     z-index: 1000;
+    color: white;
 }
 
 .sidebar.collapsed {
@@ -33,7 +46,7 @@ body {
 /* Sidebar Header */
 .sidebar-header {
     padding: 25px 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -45,22 +58,10 @@ body {
     gap: 12px;
 }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 10px;
-    color: white;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .logo-text {
     font-size: 18px;
     font-weight: 600;
-    color: #2d3748;
+    color: white;
 }
 
 .sidebar.collapsed .logo-text {
@@ -72,13 +73,14 @@ body {
     border: none;
     font-size: 20px;
     cursor: pointer;
-    color: #666;
+    color: white;
     transition: all 0.2s ease;
 }
 
 .toggle-btn:hover {
-    background: #f0f0f0;
+    background: rgba(255, 255, 255, 0.1);
     transform: scale(1.05);
+    border-radius: 6px;
 }
 
 /* Navigation Menu */
@@ -101,16 +103,15 @@ body {
     align-items: center;
     gap: 15px;
     font-size: 16px;
-    color: #4a5568;
+    color: white;
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .menu-toggle:hover,
 .menu-toggle.active {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: var(--color-acento);
     color: white;
     transform: translateX(5px);
-    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
 }
 
 .menu-icon {
@@ -142,7 +143,7 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background: #f9f9f9;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     margin-top: 5px;
 }
@@ -151,19 +152,19 @@ body {
     max-height: 300px;
 }
 
-.submenu-item {
+.submenu-item a {
+    display: block;
     padding: 12px 20px 12px 55px;
-    color: #666;
+    color: #ffffffb3;
     border-radius: 8px;
     margin: 2px 5px;
-    cursor: pointer;
+    text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.submenu-item:hover {
-    background: #eef2ff;
-    color: #667eea;
-    transform: translateX(4px);
+.submenu-item a:hover {
+    background: var(--color-hover);
+    color: var(--color-principal);
 }
 
 /* Main Content */
@@ -171,10 +172,11 @@ body {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
+    background-color: var(--color-fondo);
 }
 
 .welcome-card {
-    background: #ffffff;
+    background: var(--color-secundario);
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
@@ -185,13 +187,13 @@ body {
 .welcome-title {
     font-size: 32px;
     font-weight: 700;
-    color: #2d3748;
+    color: var(--color-principal);
     margin-bottom: 10px;
 }
 
 .welcome-subtitle {
     font-size: 18px;
-    color: #666;
+    color: var(--color-subtexto);
     margin-bottom: 30px;
 }
 
@@ -217,12 +219,12 @@ body {
 .stat-number {
     font-size: 28px;
     font-weight: bold;
-    color: #2d3748;
+    color: var(--color-principal);
     margin-bottom: 5px;
 }
 
 .stat-label {
-    color: #666;
+    color: var(--color-subtexto);
     font-size: 14px;
 }
 

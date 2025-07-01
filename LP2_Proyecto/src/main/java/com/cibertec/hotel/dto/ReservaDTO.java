@@ -26,9 +26,9 @@ public class ReservaDTO {
     @NotNull(message = "Debe seleccionar un cliente")
     private Integer clienteId;
 
+
     @NotNull(message = "Debe seleccionar una habitación")
     private Integer habitacionId;
 
-//    @NotNull(message = "Debe seleccionar un estado de reserva")
-//    private Integer estadoReservaId;
+    private Integer estadoId;
 }

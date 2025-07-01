@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cibertec.hotel.dto.ReservaDTO;
 import com.cibertec.hotel.entities.Cliente;
+import com.cibertec.hotel.entities.EstadoReserva;
 import com.cibertec.hotel.entities.Habitacion;
 import com.cibertec.hotel.entities.Reserva;
 import com.cibertec.hotel.repositories.ClienteRepository;
@@ -72,26 +73,53 @@ public class ReservaServiceImpl implements ReservaService{
 
 	@Override
 	public Optional<Reserva> editarReserva(int id, ReservaDTO dto) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		Reserva reserva = reservaRepository.findById(id)
+					.orElseThrow(()->new RuntimeException("Reserva con id : "+id+" no encontrada"));
+		reserva.setFechaInicio(dto.getFechaInicio());
+		reserva.setFechaFin(dto.getFechaFin());
+		Habitacion anterior = reserva.getHabitacion();
+		Cliente cliente = clienteRepository.findById(dto.getClienteId())
+		        .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
+		reserva.setCliente(cliente);
+		Habitacion habitacionNueva = habitacionRepository.findById(dto.getHabitacionId())
+		        .orElseThrow(() -> new IllegalArgumentException("Habitación no encontrada"));
+		if(!anterior.getId().equals(habitacionNueva.getId())) {
+			anterior.setDisponible(true);
+			habitacionRepository.save(anterior);
+			if(!habitacionNueva.getDisponible()) {
+				throw new IllegalArgumentException("La nueva habitacion esta ocupada");
+			}
+			habitacionNueva.setDisponible(false);
+			reserva.setHabitacion(habitacionNueva);
+			habitacionRepository.save(habitacionNueva);
+		}
+	    EstadoReserva estado = estadoReservaRepository.findById(dto.getEstadoId())
+	            .orElseThrow(() -> new IllegalArgumentException("Estado de reserva no válido"));
+
+	   reserva.setEstadoReserva(estado);
+		
+		return Optional.of(reservaRepository.save(reserva));
 	}
 
 	@Override
 	public Optional<Reserva> buscarReservaPorId(int id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return reservaRepository.findById(id);
 	}
 
 	@Override
 	public List<Reserva> consultarReservaPorEstado(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		return reservaRepository.findByEstadoReservaNombreIgnoreCase(nombre);
 	}
 
 	@Override
 	public String generarNroReserva() {
 		 long total = reservaRepository.count() + 1;
-		 return String.format("%06d", total); // ej. 000001
+		 return String.format("%06d", total); 
+	}
+
+	@Override
+	public List<EstadoReserva> listarEstados() {
+		return estadoReservaRepository.findAll();
 	}
 
 }

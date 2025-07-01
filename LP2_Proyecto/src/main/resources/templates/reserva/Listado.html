@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Reservas</title>
+    <link rel="stylesheet" th:href="@{/styles/reserva.css}">
+</head>
+<body>
+	<div class="container listado-container">
+	    <div class="header listado-header">
+	        <h1 style="color: white;">📝 Listado de Reservas</h1>
+	    </div>
+
+	    <div class="main-content">
+	        <form th:action="@{/reservas/filtrar}" method="get" class="listado-form">
+	            <div>
+	                <label for="estado">Filtrar por estado:</label>
+	                <select name="estado" id="estado" onchange="this.form.submit()">
+	                    <option value="">-- Todos --</option>
+	                    <option value="PENDIENTE" th:selected="${estadoSeleccionado == 'PENDIENTE'}">Pendiente</option>
+	                    <option value="CANCELADO" th:selected="${estadoSeleccionado == 'CANCELADO'}">Cancelado</option>
+	                </select>
+	            </div>
+	        </form>
+
+	        <table class="table-reservas">
+	            <thead>
+	                <tr>
+	                    <th>Nro Reserva</th>
+	                    <th>Cliente</th>
+	                    <th>Habitación</th>
+	                    <th>Fecha Inicio</th>
+	                    <th>Fecha Fin</th>
+	                    <th>Estado</th>
+	                    <th>Acciones</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="reserva : ${reservas}">
+	                    <td th:text="${reserva.nroReserva}">NRO123</td>
+	                    <td th:text="${reserva.cliente.nombres + ' ' + reserva.cliente.apellidoPaterno}">Nombre Cliente</td>
+	                    <td th:text="'N° ' + ${reserva.habitacion.numero}">Hab 101</td>
+	                    <td th:text="${#temporals.format(reserva.fechaInicio, 'dd/MM/yyyy')}">01/01/2025</td>
+	                    <td th:text="${#temporals.format(reserva.fechaFin, 'dd/MM/yyyy')}">02/01/2025</td>
+	                    <td th:text="${reserva.estadoReserva.nombre}">PENDIENTE</td>
+						<td style="white-space: nowrap;">
+						    <a th:href="@{/reservas/pdf/{id}(id=${reserva.id})}" class="btn" style="margin-right: 6px;">📄 PDF</a>
+						    <a th:href="@{/reservas/editar/{id}(id=${reserva.id})}" class="btn btn-secondary">✏️ Actualizar</a>
+						</td>
+
+
+	                </tr>
+	                <tr th:if="${#lists.isEmpty(reservas)}">
+	                    <td colspan="7" class="no-data">No se encontraron reservas.</td>
+	                </tr>
+	            </tbody>
+	        </table>
+	    </div>
+		<div style="margin: 20px 0;">
+		               <a th:href="@{/}" class="btn btn-back" style="text-decoration: none;">
+		                   🔙 Volver al Menú Principal
+		               </a>
+		           </div>
+	</div>
+
+</body>
+</html>

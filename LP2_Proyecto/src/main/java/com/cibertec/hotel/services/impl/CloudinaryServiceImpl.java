@@ -28,12 +28,12 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 	        byte[] bytes = IOUtils.toByteArray(archivo);
 
 	        Map<String, Object> options = new HashMap<>();
-	        options.put("public_id", nombreArchivo);     // solo el nombre del archivo
-	        options.put("folder", carpeta);              // ahora sí defines el folder correctamente
+	        options.put("public_id", nombreArchivo);     
+	        options.put("folder", carpeta);              
 
 	        Map<?, ?> result = cloudinary.uploader().upload(bytes, options);
 
-	        return result.get("secure_url").toString();  // URL completa de la imagen subida
+	        return result.get("secure_url").toString();  
 	    } catch (Exception e) {
 	        System.err.println("Error al subir la imagen: " + e.getMessage());
 	        throw new IOException("Error al subir imagen", e);
