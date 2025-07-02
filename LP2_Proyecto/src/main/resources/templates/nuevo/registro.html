@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" th:href="@{/styles/registro.css}">
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Registro de Usuario</h2>
+	<div class="main-content">
+            <div th:if="${mensaje}" class="message success">
+                <p th:text="${mensaje}"></p>
+            </div>
+            <div th:if="${error}" class="message error">
+                <p th:text="${error}"></p>
+            </div>
+		<form th:action="@{/registro}" method="post" enctype="multipart/form-data" th:object="${usuarioDTO}">
+          <div class="form-grid">
+            <div class="form-group">
+                <label for="username">Nombre de Usuario:</label>
+                <input type="text" id="username" th:field="*{username}" required placeholder="Ingrese nombre de usuario">
+				<div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" th:field="*{correo}" required placeholder="usuario@ejemplo.com">
+				<div class="error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="clave">Contraseña:</label>
+                <input type="password" id="clave" th:field="*{clave}" required placeholder="Ingrese una Contraseña">
+				<div class="error" th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="idRol">Rol del Usuario:</label>
+				<select id="idRol" th:field="*{idRol}" required>
+				    <option value="" disabled selected>-- Selecciona un rol --</option>
+				    <option th:each="rol : ${listaRoles}" 
+				            th:value="${rol.idRol}" 
+				            th:text="${rol.nombre}"></option>
+				</select>
+				<div class="error" th:if="${#fields.hasErrors('idRol')}" th:errors="*{idRol}"></div>
+
+            </div> 
+
+            <div class="form-group">
+                <label for="imagen">Imagen de Perfil:</label>
+                <div class="file-upload">
+                    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+        </div>
+    </form>
+
+        <p><a th:href="@{/login}">Volver al login</a></p>
+    </div>
+</body>
+</html>

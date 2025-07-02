@@ -13,7 +13,6 @@ public class NumeroHabitacionUnicoValidator implements ConstraintValidator<Numer
     private HabitacionRepository habitacionRepository;
 	@Override
 	public boolean isValid(String numero, ConstraintValidatorContext context) {
-		   // Evita errores si el número es null o vacío
         if (numero == null || numero.trim().isEmpty()) {
             return true;
         }

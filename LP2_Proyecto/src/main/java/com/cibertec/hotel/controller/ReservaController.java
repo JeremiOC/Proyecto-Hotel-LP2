@@ -1,11 +1,14 @@
 package com.cibertec.hotel.controller;
 
 import java.io.OutputStream;
+import java.util.Base64;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,7 +35,6 @@ import jakarta.validation.Valid;
 @RequestMapping("/reservas")
 public class ReservaController {
 
-    private final ReservaRepository reservaRepository;
 	@Autowired
 	private ReservaService reservaService;
 	@Autowired
@@ -42,13 +44,10 @@ public class ReservaController {
 	@Autowired
 	private SpringTemplateEngine templateEngine;
 
-    ReservaController(ReservaRepository reservaRepository) {
-        this.reservaRepository = reservaRepository;
-    }
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro(Model model) {
     	ReservaDTO dto = new ReservaDTO();
-        dto.setNroReserva(reservaService.generarNroReserva()); // Generar antes del submit
+        dto.setNroReserva(reservaService.generarNroReserva());
 
         model.addAttribute("reservaDto", dto);
         model.addAttribute("habitacionesDisponibles", habitacionService.listarHabitacionesActivas());
@@ -162,21 +161,31 @@ public class ReservaController {
     
     
     @GetMapping("/pdf/{id}")	
-	public void generarPDF(@PathVariable Integer id,HttpServletResponse response) throws Exception{
-    	Reserva reserva = reservaService.buscarReservaPorId(id)
-    					.orElseThrow(()->new RuntimeException("Reserva no encontrada"));
-    	Context context = new Context();
-    	context.setVariable("reserva", reserva);
-    	
-    	String html = templateEngine.process("pdf/ReservaPDF", context);
-    	ITextRenderer renderer = new ITextRenderer();
-    	renderer.setDocumentFromString(html);
-    	renderer.layout();
-    	
-    	response.setContentType("application/pdf");
-    	response.setHeader("Content-Disposition","attachment; filename=Reserva_"+reserva.getNroReserva()+".pdf");
-    	OutputStream output = response.getOutputStream();
-    	output.close();
-    	output.flush();
+    public void generarPDF(@PathVariable Integer id, HttpServletResponse response) throws Exception {
+        Reserva reserva = reservaService.buscarReservaPorId(id)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        Context context = new Context();
+        context.setVariable("reserva", reserva);
+        
+        ClassPathResource imageFile = new ClassPathResource("static/imgs/horizon_luxe_logo.jpeg");
+        byte[] imageBytes = FileCopyUtils.copyToByteArray(imageFile.getInputStream());
+        String base64 = Base64.getEncoder().encodeToString(imageBytes);
+        context.setVariable("logoBase64", base64);
+        
+        String html = templateEngine.process("pdf/ReservaPDF", context);
+
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(html);
+        renderer.layout();
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=Reserva_" + reserva.getNroReserva() + ".pdf");
+
+        try (OutputStream output = response.getOutputStream()) {
+            renderer.createPDF(output); 
+            output.flush();
+        }
     }
+
 }

@@ -10,7 +10,7 @@ public class RangoFechaReservaValidator implements ConstraintValidator<RangoFech
 	@Override
 	public boolean isValid(ReservaDTO dto, ConstraintValidatorContext context) {
 		 if (dto.getFechaInicio() == null || dto.getFechaFin() == null) {
-	            return true; // ya lo valida @NotNull
+	            return true; 
 	        }
 
 	        return dto.getFechaFin().isAfter(dto.getFechaInicio());

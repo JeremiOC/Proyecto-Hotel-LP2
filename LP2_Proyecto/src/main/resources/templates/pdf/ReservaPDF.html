@@ -1,37 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { text-align: center; color: #031d40; }
-        .section { margin-bottom: 20px; }
-        .section h2 { color: #555; border-bottom: 1px solid #ccc; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        td, th { border: 1px solid #ccc; padding: 8px; }
-        th { background-color: #f5f5f5; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #031d40;
+            padding-bottom: 10px;
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #031d40;
+            font-weight: bold;
+            text-align: right;
+            flex: 1;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #031d40;
+            border-bottom: 1px solid #ccc;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        td, th {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
-    <h1>Resumen de Reserva</h1>
+
+    <div class="header">
+		<img th:src="'data:image/jpeg;base64,' + ${logoBase64}" style="width: 120px;" />
+        <div class="title">Resumen de Reserva</div>
+    </div>
 
     <div class="section">
         <h2>Datos Generales</h2>
-        <p><strong>N° de Reserva:</strong> <span th:text="${reserva.nroReserva}"/></p>
-        <p><strong>Fecha Inicio:</strong> <span th:text="${reserva.fechaInicio}"/></p>
-        <p><strong>Fecha Fin:</strong> <span th:text="${reserva.fechaFin}"/></p>
+        <p><strong>N° de Reserva:</strong> <span th:text="${reserva.nroReserva}">000001</span></p>
+        <p><strong>Fecha Inicio:</strong> <span th:text="${reserva.fechaInicio}">2025-07-01</span></p>
+        <p><strong>Fecha Fin:</strong> <span th:text="${reserva.fechaFin}">2025-07-05</span></p>
     </div>
 
     <div class="section">
         <h2>Cliente</h2>
-        <p><strong>Nombre:</strong> <span th:text="${reserva.cliente.nombres + ' ' + reserva.cliente.apellidoPaterno + ' ' + reserva.cliente.apellidoMaterno}"/></p>
-        <p><strong>DNI:</strong> <span th:text="${reserva.cliente.nroDocumento}"/></p>
+        <p><strong>Nombre:</strong>
+            <span th:text="${reserva.cliente.nombres + ' ' + reserva.cliente.apellidoPaterno + ' ' + reserva.cliente.apellidoMaterno}">
+                Juan Pérez Díaz
+            </span>
+        </p>
+        <p><strong>DNI:</strong> <span th:text="${reserva.cliente.nroDocumento}">12345678</span></p>
     </div>
 
     <div class="section">
         <h2>Habitación</h2>
-        <p><strong>Número:</strong> <span th:text="${reserva.habitacion.numero}"/></p>
-        <p><strong>Tipo:</strong> <span th:text="${reserva.habitacion.tipo.descripcion}"/></p>
+        <p><strong>Número:</strong> <span th:text="${reserva.habitacion.numero}">101</span></p>
+        <p><strong>Tipo de Habitacion:</strong> <span th:text="${reserva.habitacion.tipo.descripcion}">Suite Deluxe</span></p>
     </div>
+
 </body>
 </html>

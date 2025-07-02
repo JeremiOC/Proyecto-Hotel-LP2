@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Hotel Horizon Luxe</title>
+    <link rel="stylesheet" th:href="@{/styles/login.css}">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-image">
+            <img th:src="@{/imgs/horizon_luxe_logo.jpeg}" alt="Horizon Luxe Logo" />
+        </div>
+
+        <div class="login-container">
+            <h2>Iniciar Sesión</h2>
+
+            <form th:action="@{/login}" method="post">
+                <div>
+                    <label for="username">Correo:</label>
+                    <input type="email" id="username" name="username" required />
+                </div>
+                <div>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+
+                <div>
+                    <button type="submit">Ingresar</button>
+                </div>
+				<p style="text-align:center; margin-top: 20px;">
+				    ¿No tienes cuenta? <a th:href="@{/registro}">Regístrate aquí</a>
+				</p>
+                <div class="message error" th:if="${param.error}">Credenciales incorrectas.</div>
+                <div class="message success" th:if="${param.logout}">Has cerrado sesión exitosamente.</div>
+				<div th:if="${param.registroExitoso}">
+				    <p style="color: green;">¡Registro exitoso! Ahora puedes iniciar sesión.</p>
+				</div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
