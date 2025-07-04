@@ -21,6 +21,7 @@
     <p th:text="'Precio por noche: S/ ' + ${detalle.precioUnitario}"></p>
 
     <h3>Reserva</h3>
+	<p th:text="'Numero de reserva: ' + ${reserva.nroReserva}"></p>
     <p th:text="'Del ' + ${reserva.fechaInicio} + ' al ' + ${reserva.fechaFin}"></p>
     <p th:text="'Días: ' + ${detalle.cantidad}"></p>
 
@@ -33,13 +34,23 @@
     <h3>Usuario que generará el CDP</h3>
     <p th:text="'Correo: ' + ${usuarioCorreo}"></p>
 
-    <form th:action="@{/comprobantes/registrar}" method="post">
-        <input type="hidden" name="idReserva" th:value="${reserva.id}" />
-        <input type="hidden" name="total" th:value="${detalle.total}" />
-        <button type="submit">✔ Confirmar</button>
-		<a th:href="@{/comprobantes/pdf/{id}(id=${reserva.id})}" class="btn" style="margin-right: 6px;">📄 PDF</a>
-        <a th:href="@{/comprobantes/listadoReservas}">Cancelar</a>
-    </form>
+	<form id="form-cdp" method="post" th:action="@{/comprobantes/registrar}" target="pdfWindow">
+	    <input type="hidden" name="idReserva" th:value="${reserva.id}" />
+	    <input type="hidden" name="total" th:value="${detalle.total}" />
+	    <button type="submit">✔ Confirmar</button>
+		<a th:href="@{/comprobantes/listadoReservas}" class="btn btn-secondary">🔙 Volver</a>
+
+	</form>
+	<script>
+	    document.getElementById('form-cdp').addEventListener('submit', function (e) {
+	        const pdfWindow = window.open('', 'pdfWindow');
+	        this.target = 'pdfWindow';
+
+	        setTimeout(() => {
+	            window.location.href = '/comprobantes/listadoReservas?success';
+	        }, 1000); 
+	    });
+	</script>
 </div>
 </body>
 </html>

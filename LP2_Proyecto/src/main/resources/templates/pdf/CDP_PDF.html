@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Comprobante de Pago</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #000;
+            margin: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            background-color: #031d40;
+            color: white;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .section p {
+            margin: 2px 0;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 10px;
+            text-align: center;
+            color: #555;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <img th:src="'data:image/jpeg;base64,' + ${logoBase64}" class="logo" alt="Logo del hotel" />
+    </div>
+
+    <h2>Comprobante de Pago</h2>
+
+    <div class="section">
+        <h3>Datos del Cliente</h3>
+        <p th:text="'Nombre: ' + ${reserva.cliente.nombres} + ' ' + ${reserva.cliente.apellidoPaterno} + ' ' + ${reserva.cliente.apellidoMaterno}"></p>
+        <p th:text="'Documento: ' + ${reserva.cliente.tipoDocumento.nombre} + ' - ' + ${reserva.cliente.nroDocumento}"></p>
+        <p th:text="'Correo: ' + ${reserva.cliente.email}"></p>
+    </div>
+
+    <div class="section">
+        <h3>Información de la Habitación</h3>
+        <p th:text="'Número de habitación: ' + ${reserva.habitacion.numero}"></p>
+        <p th:text="'Tipo: ' + ${reserva.habitacion.tipo.descripcion}"></p>
+        <p th:text="'Precio por noche: S/ ' + ${detalle.precioUnitario}"></p>
+    </div>
+
+    <div class="section">
+        <h3>Datos de la Reserva</h3>
+		<p th:text="'Numero de reserva: ' + ${reserva.nroReserva}"></p>
+        <p th:text="'Desde: ' + ${reserva.fechaInicio} + ' hasta: ' + ${reserva.fechaFin}"></p>
+        <p th:text="'Cantidad de noches: ' + ${detalle.cantidad}"></p>
+    </div>
+
+    <div class="section">
+        <h3>Resumen del Pago</h3>
+        <p th:text="'Descripción: ' + ${detalle.descripcion}"></p>
+        <p th:text="'Subtotal: S/ ' + ${detalle.subtotal}"></p>
+        <p th:text="'IGV (18%): S/ ' + ${detalle.igv}"></p>
+        <p class="total" th:text="'Total a pagar: S/ ' + ${detalle.total}"></p>
+    </div>
+
+    <hr/>
+
+    <div class="section">
+        <h3>Emitido por</h3>
+        <p th:text="'Usuario: ' + ${usuarioCorreo}"></p>
+		<p th:text="'Fecha de emisión: ' + ${#temporals.format(fechaEmision, 'dd/MM/yyyy')}"></p>
+    </div>
+
+    <div class="footer">
+        Horizon Luxe - Sistema de Gestión Hotelera; 2025
+    </div>
+</body>
+</html>

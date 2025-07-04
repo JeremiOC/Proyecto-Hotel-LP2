@@ -32,6 +32,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	private final CloudinaryService cloudinaryService;
 	private final CorreoService correoService;
 	private final RolRepository rolRepository;
+	
 	@Autowired
 	private SpringTemplateEngine templateEngine;
 	

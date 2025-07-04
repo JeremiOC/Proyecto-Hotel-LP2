@@ -48,7 +48,7 @@
                     <label>Descripción:</label>
 					<input type="text"
 							id="habitacionInput"
-							th:value="'N° ' + ${habitacion.numero} + ' - ' + ${habitacion.tipo.descripcion}"
+							th:value="'N° ' + ${habitacion.numero} + ' - ' + ${habitacion.tipo.descripcion}+' - '+${habitacion.tipo.precio}"
 							readonly>
                 </div>
 				<div class="error" th:if="${#fields.hasErrors('habitacionId')}" th:errors="*{habitacionId}"></div>
@@ -110,9 +110,12 @@
                  th:data-id="${hab.id}"
                  th:data-numero="${hab.numero}"
                  th:data-descripcion="${hab.tipo.descripcion}"
+                 th:data-precio="${hab.tipo.precio}"
                  onclick="seleccionarHabitacionModal(this)">
                 <h4 th:text="'N° ' + ${hab.numero}"></h4>
                 <p th:text="${hab.tipo.descripcion}"></p>
+                <p th:text="${hab.tipo.precio}"></p>
+				
             </div>
         </div>
     </div>
@@ -132,8 +135,9 @@
 	    const id = card.getAttribute('data-id');
 	    const numero = card.getAttribute('data-numero');
 	    const descripcion = card.getAttribute('data-descripcion');
+	    const precio = card.getAttribute('data-precio');
 	    document.getElementById('habitacionId').value = id;
-	    document.getElementById('habitacionInput').value = `N° ${numero} - ${descripcion}`;
+	    document.getElementById('habitacionInput').value = `N° ${numero} - ${descripcion} - ${precio}`;
 	    cerrarModalHabitaciones();
 	}
 </script>

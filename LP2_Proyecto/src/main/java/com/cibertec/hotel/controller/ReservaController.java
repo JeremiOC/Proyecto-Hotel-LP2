@@ -130,7 +130,7 @@ public class ReservaController {
     	    if (optReserva.isEmpty()) {
     	        attr.addFlashAttribute("error", "Reserva no encontrada");
     	        return "redirect:/reservas/listado";
-    	    }
+    	    }	
 
     	    Reserva reserva = optReserva.get();
 
@@ -140,7 +140,6 @@ public class ReservaController {
     	    model.addAttribute("clienteNombre", reserva.getCliente().getNombres() + " " + reserva.getCliente().getApellidoPaterno());
     	    model.addAttribute("clienteDni", reserva.getCliente().getNroDocumento());
     	    model.addAttribute("habitacion", reserva.getHabitacion());
-    	    System.out.println("Errores de validación:");
     	    result.getAllErrors().forEach(err -> System.out.println(err.getDefaultMessage()));
     	    model.addAttribute("id", id);
     	    return "reserva/Editar";
