@@ -23,7 +23,6 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.cibertec.hotel.dto.ReservaDTO;
 import com.cibertec.hotel.entities.Reserva;
-import com.cibertec.hotel.repositories.ReservaRepository;
 import com.cibertec.hotel.services.ClienteService;
 import com.cibertec.hotel.services.HabitacionService;
 import com.cibertec.hotel.services.ReservaService;

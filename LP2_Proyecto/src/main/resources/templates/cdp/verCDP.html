@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsualización del Comprobante</title>
+	<link rel="stylesheet" th:href="@{/styles/cdp.css}">
+
+</head>
+<body>
+<div class="container">
+    <h2>Previsualización del Comprobante</h2>
+
+    <h3>Cliente</h3>
+    <p th:text="'Nombre: ' + ${reserva.cliente.nombres} + ' ' + ${reserva.cliente.apellidoPaterno} + ' ' + ${reserva.cliente.apellidoMaterno}"></p>
+    <p th:text="'Documento: ' + ${reserva.cliente.tipoDocumento.nombre} + ' - ' + ${reserva.cliente.nroDocumento}"></p>
+    <p th:text="'Email: ' + ${reserva.cliente.email}"></p>
+
+    <h3>Habitación</h3>
+    <p th:text="'Número: ' + ${reserva.habitacion.numero}"></p>
+    <p th:text="'Tipo: ' + ${reserva.habitacion.tipo.descripcion}"></p>
+    <p th:text="'Precio por noche: S/ ' + ${detalle.precioUnitario}"></p>
+
+    <h3>Reserva</h3>
+    <p th:text="'Del ' + ${reserva.fechaInicio} + ' al ' + ${reserva.fechaFin}"></p>
+    <p th:text="'Días: ' + ${detalle.cantidad}"></p>
+
+    <h3>Detalle del Comprobante</h3>
+    <p th:text="'Descripción: ' + ${detalle.descripcion}"></p>
+    <p th:text="'Subtotal: S/ ' + ${detalle.subtotal}"></p>
+    <p th:text="'IGV (18%): S/ ' + ${detalle.igv}"></p>
+    <p th:text="'Total: S/ ' + ${detalle.total}"></p>
+
+    <h3>Usuario que generará el CDP</h3>
+    <p th:text="'Correo: ' + ${usuarioCorreo}"></p>
+
+    <form th:action="@{/comprobantes/registrar}" method="post">
+        <input type="hidden" name="idReserva" th:value="${reserva.id}" />
+        <input type="hidden" name="total" th:value="${detalle.total}" />
+        <button type="submit">✔ Confirmar</button>
+		<a th:href="@{/comprobantes/pdf/{id}(id=${reserva.id})}" class="btn" style="margin-right: 6px;">📄 PDF</a>
+        <a th:href="@{/comprobantes/listadoReservas}">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

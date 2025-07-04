@@ -27,4 +27,9 @@ public class EstadoReserva {
 	
 	@Column(name = "nombre")
 	private String nombre;
+
+	public EstadoReserva(Integer idEstado) {
+		this.idEstado = idEstado;
+	}
+	
 }

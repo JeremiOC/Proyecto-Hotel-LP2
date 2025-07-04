@@ -83,6 +83,21 @@
 					         	</div>
 						</div>
 					</th:block>
+					<th:block th:if="${#authorization.expression('hasAnyRole(''CAJERO'',''ADMINISTRADOR'')')}">
+						<div class="menu-item">
+						         <button class="menu-toggle" onclick="toggleSubmenu(this)">
+						            <span class="menu-icon">💰</span>
+						            <span class="menu-text">Gestión Comprobantes</span>
+						            <span class="menu-arrow">▼</span>
+						                    </button>
+						            <div class="submenu">
+						                <div class="submenu-item">
+						                  <a th:href="@{/comprobantes/listadoReservas}">Listar Reservas</a>
+						               </div>
+						         	</div>
+							</div>
+					</th:block>
+					
 					<div class="menu-item logout-item">
 					    <form th:action="@{/logout}" method="post">
 					        <button type="submit" class="logout-button">
